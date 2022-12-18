@@ -1,44 +1,8 @@
 const User = require('../models/User');
 const jwt = require('jsonwebtoken'); 
+const { handleErrors } = require('../libs/utilities/handleErrors');
 
 const maxAge = 3 * 24 * 60 * 60; // 3 days
-
-function handleErrors(err) {
-    let errors = { 
-        email: "",
-        password: ""
-    };
-
-    // duplicate error code
-    const emailIsNotUnique = err.code === 11000;
-    if (emailIsNotUnique) {
-        errors.email = 'This e-mail already exists in our database';
-        return errors;
-    }
-
-    // incorrect email or password
-    const emailIsIncorrect = err.message === 'Incorrect Email.';
-    if (emailIsIncorrect) {
-        errors.email = "That email is not registered."
-        return errors;
-    }
-    const passwordIsIncorrect = err.message === 'Incorrect password.';
-    if (passwordIsIncorrect) {
-        errors.password = "That password is incorrect.";
-        return errors;
-    }
-    
-    // validation errors
-    const userValidationFailed = err.message.includes('User validation failed');
-    if (userValidationFailed) {
-        const valuesOfErrors = Object.values(err.errors);
-        valuesOfErrors.forEach(({properties}) => {
-            errors[properties.path] = properties.message;
-        });
-    } 
-
-    return errors;
-}
 
 function createToken(id) {
     const secret = 'Ti5qx6EfQ@z2EWae&3fSOOCu5whCFBgU5Tnmv3$VrRO$yDL*I%';
@@ -73,7 +37,6 @@ class AuthController {
             res.status(201).json({ user: user._id });
 
         } catch (err) {
-
             const errors = handleErrors(err);
             res.status(400).json({ errors });
             
@@ -102,6 +65,11 @@ class AuthController {
             const errors = handleErrors(err);
             res.status(400).json({ errors });
         }
+    }
+
+    static async logout_get(req, res) {
+        res.cookie('jwt', "", { maxAge: 1 });
+        res.redirect('login');
     }
 }
 
