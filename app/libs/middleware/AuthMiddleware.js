@@ -1,9 +1,10 @@
 const jwt = require('jsonwebtoken');
 const User = require('../../models/User');
 
+const secret = 'secret key';
+
 function requireAuth(req, res, next) {
     const token = req.cookies.jwt;
-    const secret = 'Ti5qx6EfQ@z2EWae&3fSOOCu5whCFBgU5Tnmv3$VrRO$yDL*I%';
 
     if (token) {
         jwt.verify(token, secret, (err, decodedToken) => {
@@ -23,7 +24,6 @@ function requireAuth(req, res, next) {
 
 async function checkUser(req, res, next) {
     const token = req.cookies.jwt;
-    const secret = 'Ti5qx6EfQ@z2EWae&3fSOOCu5whCFBgU5Tnmv3$VrRO$yDL*I%';
     
     if (token) {
         jwt.verify(token, secret, async (err, decodedToken) => {

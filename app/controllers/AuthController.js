@@ -3,9 +3,9 @@ const jwt = require('jsonwebtoken');
 const { handleErrors } = require('../libs/utilities/handleErrors');
 
 const maxAge = 3 * 24 * 60 * 60; // 3 days
+const secret = 'secret key';
 
 function createToken(id) {
-    const secret = 'Ti5qx6EfQ@z2EWae&3fSOOCu5whCFBgU5Tnmv3$VrRO$yDL*I%';
     const opt = {
         expiresIn: maxAge
     };
