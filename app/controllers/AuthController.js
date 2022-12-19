@@ -1,9 +1,9 @@
 const User = require('../models/User');
 const jwt = require('jsonwebtoken'); 
 const { handleErrors } = require('../libs/utilities/handleErrors');
+const { secret } = require('../helpers/config');
 
 const maxAge = 3 * 24 * 60 * 60; // 3 days
-const secret = 'secret key';
 
 function createToken(id) {
     const opt = {
@@ -16,7 +16,10 @@ function createToken(id) {
 class AuthController {
 
     static signup_get(req, res) {
-        res.render('signup');
+        let variables = {
+            title: 'Signup',
+        };
+        res.render('signup', variables);
     }
 
     static async signup_post(req, res) {
@@ -44,7 +47,10 @@ class AuthController {
     }
 
     static login_get(req, res) {
-        res.render('login');
+        let variables = {
+            title: 'Login',
+        };
+        res.render('login', variables);
     }
 
     static async login_post(req, res) {
